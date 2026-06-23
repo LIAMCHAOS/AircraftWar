@@ -1,0 +1,74 @@
+@startuml
+' PropFactory.puml
+
+abstract class AbstractFlyingObject {
+    # locationX: int
+    # locationY: int
+    # speedX: int
+    # speedY: int
+    # isValid: boolean
+    + AbstractFlyingObject(int, int, int, int)
+    + forward(): void
+    + crash(AbstractFlyingObject): boolean
+    + vanish(): void
+}
+
+abstract class AbstractProp {
+    + AbstractProp(int, int, int, int)
+    + forward(): void
+    + {abstract} effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BloodProp {
+    - hpIncrease: int = 20
+    + BloodProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BombProp {
+    + BombProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BulletProp {
+    + BulletProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BulletPlusProp {
+    + BulletPlusProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class FreezeProp {
+    + FreezeProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+AbstractFlyingObject <|-- AbstractProp
+AbstractProp <|-- BloodProp
+AbstractProp <|-- BombProp
+AbstractProp <|-- BulletProp
+AbstractProp <|-- BulletPlusProp
+AbstractProp <|-- FreezeProp
+
+class PropFactory {
+    + {static} createProp(String type, int x, int y): AbstractProp
+}
+
+class AbstractGame {
+    # props: List<AbstractProp>
+    - crashCheckAction(): void
+}
+
+class HeroAircraft {
+    {static} + getInstance(): HeroAircraft
+    + increaseHp(int): void
+    + setShootStrategy(ShootStrategy): void
+}
+
+AbstractGame o--> AbstractProp
+AbstractGame ..> PropFactory
+PropFactory ..> AbstractProp : creates
+AbstractProp ..> HeroAircraft : uses effect
+@enduml

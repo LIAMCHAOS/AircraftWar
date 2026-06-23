@@ -1,0 +1,31 @@
+@startuml
+interface Observer {
+    + update(int propType): void
+}
+
+interface Subject {
+    + addObserver(Observer o): void
+    + removeObserver(Observer o): void
+    + notifyObservers(int propType): void
+}
+
+class ConcreteSubject {
+    - observers: List<Observer>
+    + addObserver(Observer o): void
+    + removeObserver(Observer o): void
+    + notifyObservers(int propType): void
+}
+
+class AbstractEnemy {
+    + update(int propType): void
+}
+
+class BaseBullet {
+    + update(int propType): void
+}
+
+Observer <|.. AbstractEnemy
+Observer <|.. BaseBullet
+Subject <|.. ConcreteSubject
+ConcreteSubject o--> Observer
+@enduml

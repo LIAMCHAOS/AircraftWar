@@ -1,0 +1,29 @@
+@startuml
+class ScoreRecord {
+    - username: String
+    - score: int
+    - recordTime: LocalDateTime
+    + getScore(): int
+    + toString(): String
+}
+
+interface ScoreDao {
+    + getAllRecords(): List<ScoreRecord>
+    + addRecord(record: ScoreRecord): void
+    + deleteRecord(index: int): void
+}
+
+class ScoreDaoImpl {
+    - records: List<ScoreRecord>
+    - filePath: String
+    + ScoreDaoImpl(difficulty: String)
+    + getAllRecords(): List<ScoreRecord>
+    + addRecord(record: ScoreRecord): void
+    + deleteRecord(index: int): void
+    - saveToFile(): void
+    - loadFromFile(): List<ScoreRecord>
+}
+
+ScoreDao <|.. ScoreDaoImpl
+ScoreDaoImpl o--> ScoreRecord
+@enduml

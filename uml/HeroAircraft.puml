@@ -1,0 +1,37 @@
+@startuml
+' HeroAircraft.puml
+
+class HeroAircraft {
+    {static} - instance: HeroAircraft
+    - lastPropTime: long
+    - HeroAircraft(int, int, int, int, int)
+    {static} + getInstance(): HeroAircraft
+    + forward(): void
+    + increaseHp(int): void
+    + reset(): void
+    + setLastPropTime(long): void
+    + getLastPropTime(): long
+    # locationX: int
+    # locationY: int
+    # speedX: int
+    # speedY: int
+    # hp: int
+    # maxHp: int
+    # power: int
+    # direction: int
+    # shootNum: int
+    # shootCycle: int
+    - shootStrategy: ShootStrategy
+    + executeShoot(): List<BaseBullet>
+    + shoot(): List<BaseBullet>
+}
+
+class HeroController {
+    - heroAircraft: HeroAircraft
+    + HeroController(Node, HeroAircraft)
+    - handleMouse(MouseEvent): void
+}
+
+HeroAircraft "instance" <-- HeroAircraft
+HeroController --> HeroAircraft : use
+@enduml

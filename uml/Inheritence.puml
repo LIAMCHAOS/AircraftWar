@@ -1,0 +1,373 @@
+@startuml
+' Inheritence.puml
+
+' --- edu.hitsz.basic ---
+abstract class AbstractFlyingObject {
+    # locationX: int
+    # locationY: int
+    # speedX: int
+    # speedY: int
+    # image: Image
+    # width: int
+    # height: int
+    # isValid: boolean
+    # isFrozen: boolean
+    # freezeEndTime: long
+    + AbstractFlyingObject(int, int, int, int)
+    + forward(): void
+    + crash(AbstractFlyingObject): boolean
+    + setLocation(double, double): void
+    + getLocationX(): int
+    + getLocationY(): int
+    + getSpeedY(): int
+    + getImage(): Image
+    + getWidth(): int
+    + getHeight(): int
+    + notValid(): boolean
+    + vanish(): void
+    + freeze(long): void
+    + isFrozen(): boolean
+}
+
+' --- edu.hitsz.aircraft ---
+abstract class AbstractAircraft {
+    - shootStrategy: ShootStrategy
+    # maxHp: int
+    # hp: int
+    # power: int
+    # direction: int
+    # shootNum: int
+    # shootCycle: int
+    + AbstractAircraft(int, int, int, int, int)
+    + decreaseHp(int): void
+    + setShootStrategy(ShootStrategy): void
+    + getHp(): int
+    + getPower(): int
+    + getDirection(): int
+    + getShootNum(): int
+    + executeShoot(): List<BaseBullet>
+    + shoot(): List<BaseBullet>
+}
+
+class HeroAircraft {
+    {static} - instance: HeroAircraft
+    - lastPropTime: long
+    - HeroAircraft(int, int, int, int, int)
+    {static} + getInstance(): HeroAircraft
+    + increaseHp(int): void
+    + reset(): void
+    + forward(): void
+    + setLastPropTime(long): void
+    + getLastPropTime(): long
+}
+
+abstract class AbstractEnemy {
+    + AbstractEnemy(int, int, int, int, int)
+    + {abstract} getScore(): int
+    + {abstract} generateProps(): List<AbstractProp>
+    + update(int): void
+}
+
+class MobEnemy {
+    + MobEnemy(int, int, int, int, int)
+    + forward(): void
+    + shoot(): List<BaseBullet>
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class EliteEnemy {
+    + EliteEnemy(int, int, int, int, int)
+    + forward(): void
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class ElitePlusEnemy {
+    + ElitePlusEnemy(int, int, int, int, int)
+    + forward(): void
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class EliteProEnemy {
+    + EliteProEnemy(int, int, int, int, int)
+    + forward(): void
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class BossEnemy {
+    + BossEnemy(int, int, int, int, int)
+    + forward(): void
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+    + getHpRatio(): double
+}
+
+' --- edu.hitsz.bullet ---
+interface Observer {
+    + update(int): void
+}
+
+abstract class BaseBullet {
+    - power: int
+    # backupSpeedX: int
+    # backupSpeedY: int
+    + BaseBullet(int, int, int, int, int)
+    + forward(): void
+    + getPower(): int
+    + update(int): void
+}
+
+class HeroBullet {
+    + HeroBullet(int, int, int, int, int)
+}
+
+class EnemyBullet {
+    + EnemyBullet(int, int, int, int, int)
+}
+
+' --- edu.hitsz.prop ---
+abstract class AbstractProp {
+    + AbstractProp(int, int, int, int)
+    + forward(): void
+    + {abstract} effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BloodProp {
+    - hpIncrease: int = 20
+    + BloodProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BombProp {
+    + BombProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BulletProp {
+    + BulletProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class BulletPlusProp {
+    + BulletPlusProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+class FreezeProp {
+    + FreezeProp(int, int, int, int)
+    + effect(HeroAircraft, List<BaseBullet>, List<AbstractEnemy>): void
+}
+
+' --- edu.hitsz.strategy ---
+interface ShootStrategy {
+    + shoot(AbstractAircraft): List<BaseBullet>
+}
+
+class StraightShoot {
+    + shoot(AbstractAircraft): List<BaseBullet>
+}
+
+class ScatteredShoot {
+    + shoot(AbstractAircraft): List<BaseBullet>
+}
+
+class CircularShoot {
+    + shoot(AbstractAircraft): List<BaseBullet>
+}
+
+' --- edu.hitsz.factory ---
+interface EnemyFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class MobFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class EliteFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class ElitePlusFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class EliteProFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class BossFactory {
+    - hp: int
+    + BossFactory(int)
+    + createEnemy(): AbstractEnemy
+}
+
+class PropFactory {
+    + {static} createProp(String, int, int): AbstractProp
+}
+
+' --- edu.hitsz.application ---
+abstract class AbstractGame {
+    # heroAircraft: HeroAircraft
+    # enemyAircrafts: List<AbstractEnemy>
+    # heroBullets: List<BaseBullet>
+    # enemyBullets: List<BaseBullet>
+    # props: List<AbstractProp>
+    # currentEnemyMaxNumber: int
+    # currentEnemySpawnCycle: double
+    # currentEnemyShootCycle: int
+    # currentHeroShootCycle: int
+    # currentEnemySpeedMultiplier: int
+    - score: int
+    - gameOverFlag: boolean
+    - bossExists: boolean
+    - scoreSinceLastBoss: int
+    - difficultyTier: int
+    + AbstractGame()
+    + action(): void
+    + setPlayerName(String): void
+    {abstract} initGame(): void
+    {abstract} getDifficultyName(): String
+    {abstract} getBackgroundImage(): Image
+    {abstract} getEnemyMaxNumber(): int
+    {abstract} getEnemySpawnCycle(): double
+    {abstract} getHeroShootCycle(): int
+    {abstract} getEnemyShootCycle(): int
+    {abstract} canSpawnBoss(): boolean
+    {abstract} getBossSpawnThreshold(): int
+    {abstract} getBossHp(): int
+    {abstract} getMobEnemyProbability(): double
+    {abstract} getEliteEnemyProbability(): double
+    {abstract} getElitePlusProbability(): double
+    {abstract} getEliteProProbability(): double
+    {abstract} getEnemySpeedMultiplier(): int
+    {abstract} shouldIncreaseDifficulty(): boolean
+    {abstract} increaseDifficulty(): void
+    {abstract} shouldIncreaseBossHp(): boolean
+    - tick(): void
+    - enemySpawn(): void
+    - shootAction(): void
+    - bulletsMoveAction(): void
+    - aircraftMoveAction(): void
+    - crashCheckAction(): void
+    - postProcessAction(): void
+    - checkResultAction(): void
+    - render(): void
+}
+
+class EasyGame {
+    + initGame(): void
+    + getDifficultyName(): String
+    + getBackgroundImage(): Image
+    + getEnemyMaxNumber(): int
+    + getEnemySpawnCycle(): double
+    + getHeroShootCycle(): int
+    + getEnemyShootCycle(): int
+    + canSpawnBoss(): boolean
+    + getBossSpawnThreshold(): int
+    + getBossHp(): int
+    + getMobEnemyProbability(): double
+    + getEliteEnemyProbability(): double
+    + getElitePlusProbability(): double
+    + getEliteProProbability(): double
+    + getEnemySpeedMultiplier(): int
+    + shouldIncreaseDifficulty(): boolean
+    + shouldIncreaseBossHp(): boolean
+}
+
+class NormalGame {
+    + initGame(): void
+    + getDifficultyName(): String
+    + getBackgroundImage(): Image
+    + getEnemyMaxNumber(): int
+    + getEnemySpawnCycle(): double
+    + getHeroShootCycle(): int
+    + getEnemyShootCycle(): int
+    + canSpawnBoss(): boolean
+    + getBossSpawnThreshold(): int
+    + getBossHp(): int
+    + getMobEnemyProbability(): double
+    + getEliteEnemyProbability(): double
+    + getElitePlusProbability(): double
+    + getEliteProProbability(): double
+    + getEnemySpeedMultiplier(): int
+    + shouldIncreaseDifficulty(): boolean
+    + increaseDifficulty(): void
+    + shouldIncreaseBossHp(): boolean
+}
+
+class HardGame {
+    + initGame(): void
+    + getDifficultyName(): String
+    + getBackgroundImage(): Image
+    + getEnemyMaxNumber(): int
+    + getEnemySpawnCycle(): double
+    + getHeroShootCycle(): int
+    + getEnemyShootCycle(): int
+    + canSpawnBoss(): boolean
+    + getBossSpawnThreshold(): int
+    + getBossHp(): int
+    + getMobEnemyProbability(): double
+    + getEliteEnemyProbability(): double
+    + getElitePlusProbability(): double
+    + getEliteProProbability(): double
+    + getEnemySpeedMultiplier(): int
+    + shouldIncreaseDifficulty(): boolean
+    + increaseDifficulty(): void
+    + shouldIncreaseBossHp(): boolean
+}
+
+' --- 继承与实现关系 ---
+AbstractFlyingObject <|-- AbstractAircraft
+AbstractFlyingObject <|-- BaseBullet
+AbstractFlyingObject <|-- AbstractProp
+
+AbstractAircraft <|-- HeroAircraft
+AbstractAircraft <|-- AbstractEnemy
+
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- ElitePlusEnemy
+AbstractEnemy <|-- EliteProEnemy
+AbstractEnemy <|-- BossEnemy
+
+Observer <|.. AbstractEnemy
+Observer <|.. BaseBullet
+
+BaseBullet <|-- HeroBullet
+BaseBullet <|-- EnemyBullet
+
+AbstractProp <|-- BloodProp
+AbstractProp <|-- BombProp
+AbstractProp <|-- BulletProp
+AbstractProp <|-- BulletPlusProp
+AbstractProp <|-- FreezeProp
+
+ShootStrategy <|.. StraightShoot
+ShootStrategy <|.. ScatteredShoot
+ShootStrategy <|.. CircularShoot
+
+EnemyFactory <|.. MobFactory
+EnemyFactory <|.. EliteFactory
+EnemyFactory <|.. ElitePlusFactory
+EnemyFactory <|.. EliteProFactory
+EnemyFactory <|.. BossFactory
+
+AbstractGame <|-- EasyGame
+AbstractGame <|-- NormalGame
+AbstractGame <|-- HardGame
+
+' --- 关联关系 ---
+AbstractAircraft o--> ShootStrategy
+AbstractEnemy ..> PropFactory : use
+PropFactory ..> AbstractProp : creates
+EnemyFactory ..> AbstractEnemy : creates
+AbstractGame o--> AbstractEnemy
+AbstractGame o--> BaseBullet
+AbstractGame o--> AbstractProp
+AbstractGame ..> EnemyFactory
+AbstractGame ..> PropFactory
+@enduml

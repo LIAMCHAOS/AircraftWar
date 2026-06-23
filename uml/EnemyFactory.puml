@@ -1,0 +1,150 @@
+@startuml
+' EnemyFactory.puml
+skinparam shadowing false
+
+interface Observer {
+    + update(int propType): void
+}
+
+abstract class AbstractFlyingObject {
+    # locationX: int
+    # locationY: int
+    # speedX: int
+    # speedY: int
+    # isValid: boolean
+    # isFrozen: boolean
+    # freezeEndTime: long
+    + AbstractFlyingObject(int, int, int, int)
+    + forward(): void
+    + crash(AbstractFlyingObject): boolean
+    + getLocationX(): int
+    + getLocationY(): int
+    + notValid(): boolean
+    + vanish(): void
+    + freeze(long): void
+    + isFrozen(): boolean
+}
+
+abstract class AbstractAircraft {
+    # maxHp: int
+    # hp: int
+    # power: int
+    # direction: int
+    # shootNum: int
+    # shootCycle: int
+    - shootStrategy: ShootStrategy
+    + AbstractAircraft(int, int, int, int, int)
+    + decreaseHp(int): void
+    + getHp(): int
+    + getPower(): int
+    + getDirection(): int
+    + getShootNum(): int
+    + setShootStrategy(ShootStrategy): void
+    + executeShoot(): List<BaseBullet>
+    + shoot(): List<BaseBullet>
+}
+
+abstract class AbstractEnemy {
+    + AbstractEnemy(int, int, int, int, int)
+    + {abstract} getScore(): int
+    + {abstract} generateProps(): List<AbstractProp>
+    + update(int): void
+}
+
+AbstractFlyingObject <|-- AbstractAircraft
+AbstractAircraft <|-- AbstractEnemy
+Observer <|.. AbstractEnemy
+
+class MobEnemy {
+    + MobEnemy(int, int, int, int, int)
+    + shoot(): List<BaseBullet>
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class EliteEnemy {
+    + EliteEnemy(int, int, int, int, int)
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class ElitePlusEnemy {
+    + ElitePlusEnemy(int, int, int, int, int)
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class EliteProEnemy {
+    + EliteProEnemy(int, int, int, int, int)
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+}
+
+class BossEnemy {
+    + BossEnemy(int, int, int, int, int)
+    + forward(): void
+    + getScore(): int
+    + generateProps(): List<AbstractProp>
+    + getHpRatio(): double
+}
+
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- ElitePlusEnemy
+AbstractEnemy <|-- EliteProEnemy
+AbstractEnemy <|-- BossEnemy
+
+interface EnemyFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class MobFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class EliteFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class ElitePlusFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class EliteProFactory {
+    + createEnemy(): AbstractEnemy
+}
+
+class BossFactory {
+    - hp: int
+    + BossFactory(int)
+    + createEnemy(): AbstractEnemy
+}
+
+EnemyFactory <|.. MobFactory
+EnemyFactory <|.. EliteFactory
+EnemyFactory <|.. ElitePlusFactory
+EnemyFactory <|.. EliteProFactory
+EnemyFactory <|.. BossFactory
+
+class AbstractGame {
+    # heroAircraft: HeroAircraft
+    # enemyAircrafts: List<AbstractEnemy>
+    # currentEnemyMaxNumber: int
+    # currentEnemySpawnCycle: double
+    - score: int
+    - scoreSinceLastBoss: int
+    - bossExists: boolean
+    + AbstractGame()
+    + action(): void
+    - tick(): void
+    - shootAction(): void
+    - crashCheckAction(): void
+    {abstract} getDifficultyName(): String
+    {abstract} getEnemyMaxNumber(): int
+    {abstract} getEnemySpawnCycle(): double
+}
+
+AbstractGame ..> EnemyFactory
+AbstractGame o--> AbstractEnemy
+EnemyFactory ..> AbstractEnemy : creates
+@enduml

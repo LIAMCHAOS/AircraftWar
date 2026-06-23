@@ -1,0 +1,54 @@
+@startuml
+abstract class AbstractGame {
+    + action(): void
+    - tick(): void
+    - enemySpawn(): void
+    - shootAction(): void
+    - crashCheckAction(): void
+    {abstract} initGame(): void
+    {abstract} getDifficultyName(): String
+    {abstract} getEnemyMaxNumber(): int
+    {abstract} getEnemySpawnCycle(): double
+    {abstract} getHeroShootCycle(): int
+    {abstract} getEnemyShootCycle(): int
+    {abstract} canSpawnBoss(): boolean
+    {abstract} getBossHp(): int
+}
+
+class EasyGame {
+    + initGame(): void
+    + getDifficultyName(): String
+    + getEnemyMaxNumber(): int
+    + getEnemySpawnCycle(): double
+    + getHeroShootCycle(): int
+    + getEnemyShootCycle(): int
+    + canSpawnBoss(): boolean
+    + getBossHp(): int
+}
+
+class NormalGame {
+    + initGame(): void
+    + getDifficultyName(): String
+    + getEnemyMaxNumber(): int
+    + getEnemySpawnCycle(): double
+    + getHeroShootCycle(): int
+    + getEnemyShootCycle(): int
+    + canSpawnBoss(): boolean
+    + getBossHp(): int
+}
+
+class HardGame {
+    + initGame(): void
+    + getDifficultyName(): String
+    + getEnemyMaxNumber(): int
+    + getEnemySpawnCycle(): double
+    + getHeroShootCycle(): int
+    + getEnemyShootCycle(): int
+    + canSpawnBoss(): boolean
+    + getBossHp(): int
+}
+
+AbstractGame <|-- EasyGame
+AbstractGame <|-- NormalGame
+AbstractGame <|-- HardGame
+@enduml

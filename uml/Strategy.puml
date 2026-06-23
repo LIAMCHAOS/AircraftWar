@@ -1,0 +1,74 @@
+@startuml
+' Strategy.puml
+skinparam shadowing false
+
+interface ShootStrategy {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+class StraightShoot {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+class ScatteredShoot {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+class CircularShoot {
+    + shoot(AbstractAircraft aircraft): List<BaseBullet>
+}
+
+ShootStrategy <|.. StraightShoot
+ShootStrategy <|.. ScatteredShoot
+ShootStrategy <|.. CircularShoot
+
+abstract class AbstractAircraft {
+    - shootStrategy: ShootStrategy
+    # power: int
+    # direction: int
+    # shootNum: int
+    # shootCycle: int
+    # hp: int
+    # maxHp: int
+    + AbstractAircraft(int, int, int, int, int)
+    + setShootStrategy(ShootStrategy): void
+    + executeShoot(): List<BaseBullet>
+    + shoot(): List<BaseBullet>
+    + getPower(): int
+    + getDirection(): int
+    + getShootNum(): int
+}
+
+class HeroAircraft {
+    + shoot(): List<BaseBullet>
+}
+
+class MobEnemy {
+    + shoot(): List<BaseBullet>
+}
+
+class EliteEnemy {
+    + shoot(): List<BaseBullet>
+}
+
+class ElitePlusEnemy {
+    + shoot(): List<BaseBullet>
+}
+
+class EliteProEnemy {
+    + shoot(): List<BaseBullet>
+}
+
+class BossEnemy {
+    + shoot(): List<BaseBullet>
+}
+
+AbstractAircraft <|-- HeroAircraft
+AbstractAircraft <|-- MobEnemy
+AbstractAircraft <|-- EliteEnemy
+AbstractAircraft <|-- ElitePlusEnemy
+AbstractAircraft <|-- EliteProEnemy
+AbstractAircraft <|-- BossEnemy
+
+AbstractAircraft  o-->  ShootStrategy : strategy
+@enduml
